@@ -41,7 +41,6 @@ target_link_libraries(
   hello_test
   gtest
   gtest_main
-  ${HDF5_LIBRARIES}
 )
 
 gtest_discover_tests(hello_test)
