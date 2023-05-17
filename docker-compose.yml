@@ -4,15 +4,15 @@ services:
   compile:
     build: .
     volumes:
-      - ./src:/swann/src
-      - ./build:/swann/build
-    command: bash -c "cd /swann/src && cmake -S . -B build && cmake --build build && cp /swann/bin/* /swann/build"
-  swann:
+      - ./src:/nora/src
+      - ./build:/nora/build
+    command: bash -c "cd /nora/src && cmake -S . -B build && cmake --build build && cp /nora/bin/* /nora/build"
+  nora:
     build: .
-    command: /swann/build/swann
+    command: /nora/build/nora
     volumes:
-      - ./build:/swann/build
-      - ./data:/swann/data
+      - ./build:/nora/build
+      - ./data:/nora/data
     depends_on:
       compile:
         condition: service_completed_successfully
@@ -21,11 +21,11 @@ services:
 
   test:
     build: .
-    command: /swann/build/hello_test
+    command: /nora/build/hello_test
     profiles: [ "test" ]
     volumes:
-      - ./build:/swann/build
-      - ./data:/swann/data
+      - ./build:/nora/build
+      - ./data:/nora/data
     depends_on:
       compile:
         condition: service_completed_successfully
@@ -34,29 +34,15 @@ services:
 
   benchmark:
     build: .
-    command: /swann/scripts/run_benchmark.sh 
+    command: /nora/scripts/run_benchmark.sh 
     profiles: [ "benchmark" ]
     volumes:
-      - ./build:/swann/build
-      - ./data:/swann/data
-      - ./benchmark:/swann/benchmark
-      - ./scripts:/swann/scripts
+      - ./build:/nora/build
+      - ./data:/nora/data
+      - ./benchmark:/nora/benchmark
+      - ./scripts:/nora/scripts
     depends_on:
       compile:
         condition: service_completed_successfully
     environment:
       - DEBUG=true
-
-  notebooks:
-    build: ./notebooks
-    profiles: [ "analyse" ]
-    ports:
-      - 8888:8888
-    volumes:
-      - ./data:/swann/data
-      - ./benchmark:/swann/benchmark
-      - ./notebooks/notebooks:/swann/notebooks
-
-
-    
-    
