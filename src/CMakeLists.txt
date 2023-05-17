@@ -32,19 +32,19 @@ file(GLOB TEST_FILES
 )
 
 add_executable(
-  nora_tests
+  hello_test
   ${SOURCE_FILES}
   ${TEST_FILES}
 )
 
 target_link_libraries(
-  nora_tests
+  hello_test
   gtest
   gtest_main
   ${HDF5_LIBRARIES}
 )
 
-gtest_discover_tests(nora_tests)
+gtest_discover_tests(hello_test)
 
 
 # Benchmarking
