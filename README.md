@@ -1,0 +1,2 @@
+# Nora
+C++ Chess Engine
