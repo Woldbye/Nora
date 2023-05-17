@@ -4,6 +4,7 @@ Chess engine developed in C++23. The goal of the project is to see how much I ha
 ## Specifications
 * C++23
 * Docker Compose
+* Header only library
 * UCI-protocl <!-- TODO Add reference to API -->
 
 ## API

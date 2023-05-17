@@ -1,0 +1,62 @@
+version: "3.8"
+
+services:
+  compile:
+    build: .
+    volumes:
+      - ./src:/swann/src
+      - ./build:/swann/build
+    command: bash -c "cd /swann/src && cmake -S . -B build && cmake --build build && cp /swann/bin/* /swann/build"
+  swann:
+    build: .
+    command: /swann/build/swann
+    volumes:
+      - ./build:/swann/build
+      - ./data:/swann/data
+    depends_on:
+      compile:
+        condition: service_completed_successfully
+    environment:
+      - DEBUG=true
+
+  test:
+    build: .
+    command: /swann/build/hello_test
+    profiles: [ "test" ]
+    volumes:
+      - ./build:/swann/build
+      - ./data:/swann/data
+    depends_on:
+      compile:
+        condition: service_completed_successfully
+    environment:
+      - DEBUG=true
+
+  benchmark:
+    build: .
+    command: /swann/scripts/run_benchmark.sh 
+    profiles: [ "benchmark" ]
+    volumes:
+      - ./build:/swann/build
+      - ./data:/swann/data
+      - ./benchmark:/swann/benchmark
+      - ./scripts:/swann/scripts
+    depends_on:
+      compile:
+        condition: service_completed_successfully
+    environment:
+      - DEBUG=true
+
+  notebooks:
+    build: ./notebooks
+    profiles: [ "analyse" ]
+    ports:
+      - 8888:8888
+    volumes:
+      - ./data:/swann/data
+      - ./benchmark:/swann/benchmark
+      - ./notebooks/notebooks:/swann/notebooks
+
+
+    
+    
